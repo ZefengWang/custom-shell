@@ -10,6 +10,20 @@ SHOWTIME="1795.0"
 ANMITIME="5.0"
 PICARR=()
 
+
+if [ ! -d $HOME/.local/share/backgrounds/contest ]
+then
+	mkdir -p $HOME/.local/share/backgrounds/contest
+fi
+if [ ! -d $HOME/.local/share/gnome-background-properties ]
+then
+	mkdir -p $HOME/.local/share/gnome-background-properties
+fi
+
+DIR1=$HOME/.local/share/backgrounds/contest
+DIR2=$HOME/.local/share/gnome-background-properties
+
+
 function genxml() {
 	if [[ $# == 0 ]];then echo "No args specific!"; echo -e "usage: $0 /PATH/to/your/pics\n"; return 1; fi
 	NUM=0
@@ -29,7 +43,7 @@ function genxml() {
 		for i in $(seq 1 $TOTAL );
 		do
 			let NEXT=i+1
-			echo ${PICARR[$i]}
+			#echo ${PICARR[$i]}
 			if [[ $NEXT == $TOTAL ]];then let NEXT=0;fi
 			RESULT="${RESULT}\t<static>\n\t\t<duration>$SHOWTIME</duration>\n\t\t<file>${PICARR[$i]}</file>\n\t</static>\n"
 			RESULT="${RESULT}\t<transition>\n\t\t<duration>$ANMITIME</duration>\n\t\t<from>${PICARR[$i]}</from>\n\t\t<to>${PICARR[$NEXT]}</to>\n\t</transition>\n"
@@ -40,7 +54,7 @@ function genxml() {
 	echo -e $SCRIPTBODY >> custom.xml
 	echo -e $SCRIPTTAIL >> custom.xml
 
-	sudo cp custom.xml /usr/share/backgrounds/contest/custom.xml
+	cp custom.xml $DIR1/custom.xml
 
 	return 0;
 }
@@ -57,20 +71,19 @@ function genxml2()
 		CONFIGBODY="$CONFIGBODY\t<wallpaper>\n\t\t<name>${str%.*}</name>\n\t\t<filename>${PICARR[$i]}</filename>\n\t\t<options>zoom</options>\n\t\t<pcolor>#000000</pcolor>\n\t\t<scolor>#000000</scolor>\n\t\t<shade_type>solid</shade_type>\n\t</wallpaper>\n"
 		let NUM+=1
 	done
-	#CONFIGHEAD="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE wallpapers SYSTEM \"gnome-wp-list.dtd\">\n<wallpapers>\n"
-	CONFIGANMI="\t<wallpaper deleted=\"false\">\n\t\t<name>Custom Wallpapers</name>\n\t\t<filename>/usr/share/backgrounds/contest/custom.xml</filename>\n\t\t<options>zoom</options>\n\t</wallpaper>"
-	#CONFIGTAIL="</wallpapers>\n"
-	#sudo touch /usr/share/gnome-background-properties/custom-wallpapers.xml 
-	#sudo chown $USER /usr/share/gnome-background-properties/custom-wallpapers.xml
-	#echo -e $CONFIGHEAD >  /usr/share/gnome-background-properties/custom-wallpapers.xml
-	#echo -e $CONFIGANMI >> /usr/share/gnome-background-properties/custom-wallpapers.xml
-	#echo -e $CONFIGBODY >> /usr/share/gnome-background-properties/custom-wallpapers.xml
-	#echo -e $CONFIGTAIL >> /usr/share/gnome-background-properties/custom-wallpapers.xml
+	CONFIGHEAD="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE wallpapers SYSTEM \"gnome-wp-list.dtd\">\n<wallpapers>\n"
+	CONFIGANMI="\t<wallpaper deleted=\"false\">\n\t\t<name>Custom Wallpapers</name>\n\t\t<filename>$DIR1/custom.xml</filename>\n\t\t<options>zoom</options>\n\t</wallpaper>"
+	CONFIGTAIL="</wallpapers>\n"
+	touch 			$DIR2/custom-wallpapers.xml 
+	echo -e $CONFIGHEAD >  	$DIR2/custom-wallpapers.xml
+	echo -e $CONFIGANMI >> 	$DIR2/custom-wallpapers.xml
+	echo -e $CONFIGBODY >> 	$DIR2/custom-wallpapers.xml
+	echo -e $CONFIGTAIL >>  $DIR2/custom-wallpapers.xml
 
-	echo -e $CONFIGANMI > tmp.txt
-	echo -e $CONFIGBODY >> tmp.txt
-	sudo sed -i '/<wallpapers>/r tmp.txt' /usr/share/gnome-background-properties/focal-wallpapers.xml > /dev/null
-	rm tmp.txt
+	#echo -e $CONFIGANMI > tmp.txt
+	#echo -e $CONFIGBODY >> tmp.txt
+	#sudo sed -i '/<wallpapers>/r tmp.txt' $DIR2/focal-wallpapers.xml > /dev/null
+	#rm tmp.txt
 }
 
 genxml $@
