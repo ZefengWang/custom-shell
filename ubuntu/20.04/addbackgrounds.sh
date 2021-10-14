@@ -18,10 +18,7 @@ function genxml() {
 	TOTAL=0
 	for i in $@; do for f in `ls $@`;do if [ "${i:0:1}" == "/" ];then PICARR[$NUM]=$i/$f;else PICARR[$NUM]=`pwd`/$i/$f;fi;let NUM+=1;done;done
 
-	echo ${PICARR[@]}
 	TOTAL=${#PICARR[@]}
-	echo $TOTAL ${PICARR[0]}
-	echo "------------"
 	if [[ 1 == ${#PICARR[@]} ]];then
 		echo "Only One pic"
 		RESULT="${RESULT}\t<static>\n\t\t<duration>$SHOWTIME</duration>\n\t\t<file>${#PICARR[0]}</file>\n\t</static>\n"
