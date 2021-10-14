@@ -45,6 +45,7 @@ function genxml() {
 
 	sudo cp custom.xml /usr/share/backgrounds/contest/custom.xml
 
+	return 0;
 }
 
 function genxml2()
