@@ -33,6 +33,7 @@ function genxml() {
 	for i in $@; do for f in `ls $@`;do if [ "${i:0:1}" == "/" ];then PICARR[$NUM]=$i/$f;else PICARR[$NUM]=`pwd`/$i/$f;fi;let NUM+=1;done;done
 
 	TOTAL=${#PICARR[@]}
+	let TOTAL-=1
 	if [[ 1 == ${#PICARR[@]} ]];then
 		echo "Only One pic"
 		RESULT="${RESULT}\t<static>\n\t\t<duration>$SHOWTIME</duration>\n\t\t<file>${#PICARR[0]}</file>\n\t</static>\n"
@@ -44,7 +45,7 @@ function genxml() {
 		do
 			let NEXT=i+1
 			#echo ${PICARR[$i]}
-			if [[ $NEXT == $TOTAL ]];then let NEXT=0;fi
+			if [[ $i == $TOTAL ]];then let NEXT=0;fi
 			RESULT="${RESULT}\t<static>\n\t\t<duration>$SHOWTIME</duration>\n\t\t<file>${PICARR[$i]}</file>\n\t</static>\n"
 			RESULT="${RESULT}\t<transition>\n\t\t<duration>$ANMITIME</duration>\n\t\t<from>${PICARR[$i]}</from>\n\t\t<to>${PICARR[$NEXT]}</to>\n\t</transition>\n"
 		done
