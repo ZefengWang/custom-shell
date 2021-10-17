@@ -30,7 +30,19 @@ function genxml() {
 	PICARR=()
 	RESULT=""
 	TOTAL=0
-	for i in $@; do for f in `ls $@`;do if [ "${i:0:1}" == "/" ];then PICARR[$NUM]=$i/$f;else PICARR[$NUM]=`pwd`/$i/$f;fi;let NUM+=1;done;done
+	for i in $@;
+	do 
+		for f in `ls $i`;
+		do
+			if [ "${i:0:1}" == "/" ];
+			then
+				PICARR[$NUM]=$i/$f;
+			else
+				PICARR[$NUM]=`pwd`/$i/$f;
+			fi
+			let NUM+=1;
+		done
+	done
 
 	TOTAL=${#PICARR[@]}
 	let TOTAL-=1
