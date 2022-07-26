@@ -9,6 +9,8 @@ SCRIPTBODY=""
 SHOWTIME="1795.0"
 ANMITIME="5.0"
 PICARR=()
+# OPTION can be 'zoom' 'wallpaper' 'stretched' 'spanned'
+OPTION=zoom
 
 
 if [ ! -d $HOME/.local/share/backgrounds/contest ]
@@ -68,7 +70,7 @@ function genxml2()
 	for i in $(seq 0 $TOTAL );
 	do
 		str=${PICARR[$i]##*/}
-		CONFIGBODY="$CONFIGBODY\t<wallpaper>\n\t\t<name>${str%.*}</name>\n\t\t<filename>${PICARR[$i]}</filename>\n\t\t<options>zoom</options>\n\t\t<pcolor>#000000</pcolor>\n\t\t<scolor>#000000</scolor>\n\t\t<shade_type>solid</shade_type>\n\t</wallpaper>\n"
+		CONFIGBODY="$CONFIGBODY\t<wallpaper>\n\t\t<name>${str%.*}</name>\n\t\t<filename>${PICARR[$i]}</filename>\n\t\t<options>${OPTION}</options>\n\t\t<pcolor>#000000</pcolor>\n\t\t<scolor>#000000</scolor>\n\t\t<shade_type>solid</shade_type>\n\t</wallpaper>\n"
 		let NUM+=1
 	done
 	CONFIGHEAD="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE wallpapers SYSTEM \"gnome-wp-list.dtd\">\n<wallpapers>\n"
