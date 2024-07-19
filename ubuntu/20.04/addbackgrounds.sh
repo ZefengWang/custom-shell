@@ -32,7 +32,7 @@ function genxml() {
 	PICARR=()
 	RESULT=""
 	TOTAL=0
-	for i in $@; do for f in `ls $i`;do if [ "${i:0:1}" == "/" ]; then PICARR[$NUM]=$i/$f; else PICARR[$NUM]=`pwd`/$i/$f;fi;let NUM+=1;done;done
+	for i in $@; do for f in `ls $i`;do if [ "${i:0:1}" == "/" ]; then PICARR[$NUM]=`echo "$i/$f" | sed 's/&/\&amp;/g' | sed "s/'/\&quot;/g" | sed 's/"/\&apos;/g' | sed 's/</\&lt;/g' | sed 's/>/\&gt;/g'`; else PICARR[$NUM]=`echo "`pwd`/$i/$f" | sed 's/&/\&amp;/g' | sed "s/'/\&quot;/g" | sed 's/"/\&apos;/g' | sed 's/</\&lt;/g' | sed 's/>/\&gt;/g'`;fi;let NUM+=1;done;done
 	TOTAL=${#PICARR[@]}
 	let TOTAL-=1
 	if [[ 1 == ${#PICARR[@]} ]];then
